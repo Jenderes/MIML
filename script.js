@@ -1,4 +1,5 @@
 $("#start").on("click", () => {
+  var setr;
   function RandomArrayNotRepeat(n) {
     // массив объектов
     let pingt = [];
@@ -54,14 +55,22 @@ $("#start").on("click", () => {
   // создание html элементов
   let zapr = `<div class='radius'></div><div id='center'><p>0</p></div>`;
   for (let i = 0; i < arrayobj.length; i++) {
-    zapr += `<div class='field'><p>number:${arrayobj[i].number}</p><p>id:${
-      arrayobj[i].id
-    },idmax:${arrayobj[i].idmax}</p></div>`;
+    zapr += `<div class='field'><p>number:${arrayobj[i].number}</p><p>id:${arrayobj[i].id},idmax:${arrayobj[i].idmax}</p></div>`;
+    if (arrayobj[i].idmax === arrayobj.length) {
+      setr = i;
+    }
   }
   // вывод html элементов на страницу
   $("#container").html(zapr);
   let step = (2 * Math.PI) / $(".field").length;
-  $(".field").each(function() {
+  $(".field").each(function(index) {
+    console.log(index);
+    if (index === setr) {
+      console.log(setr);
+      $(this).css({
+        background:'#042928'
+      })
+    }
     let x = Math.round(
       width / 2 + radius * Math.cos(angle) - $(this).width() / 2
     );
@@ -101,7 +110,13 @@ $("#start").on("click", () => {
     $("#container").html(zapr);
     $("#center p").html(schtk);
     let step = (2 * Math.PI) / $(".field").length;
-    $(".field").each(function() {
+    $(".field").each(function(index) {
+      if (index === setr) {
+        console.log(setr);
+        $(this).css({
+          background:'#042928'
+        })
+      }
       let x = Math.round(
         width / 2 + radius * Math.cos(angle) - $(this).width() / 2
       );

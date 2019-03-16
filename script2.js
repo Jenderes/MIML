@@ -1,4 +1,6 @@
 $("#start").on("click", () => {
+  // создание массива без повторений
+  var setr;
   function RandomArrayNotRepeat(n) {
     let pingt = [];
     let flag = true;
@@ -38,6 +40,7 @@ $("#start").on("click", () => {
   }
   let set;
   const time = 2000;
+  // если не число то стандартное число эдементов равно 6
   if (typeof parseInt($("#inp").val()) === "number") {
     set = $("#inp").val();
   } else {
@@ -49,16 +52,25 @@ $("#start").on("click", () => {
   const height = $("#container").height();
   let angle = 300;
   let schtk = 0;
+  // создание элементов в html
   let arrayobj = RandomArrayNotRepeat(set);
   let zapr = `<div class='radius'></div><div id='center'><p>0</p></div>`;
   for (let i = 0; i < arrayobj.length; i++) {
-    zapr += `<div class='field'><p>number:${arrayobj[i].number}</p><p>id:${
-      arrayobj[i].id
-    },idmax:${arrayobj[i].idnex}</p></div>`;
+    zapr += `<div class='field'><p>number:${arrayobj[i].number}</p><p>id:${arrayobj[i].id},idmax:${arrayobj[i].idnex}</p></div>`;
+    if (arrayobj[i].idmax === arrayobj.length) {
+      setr = i;
+    }
   }
+  // вывод элементов в html 
   $("#container").html(zapr);
   let step = (2 * Math.PI) / $(".field").length;
-  $(".field").each(function() {
+  $(".field").each(function(index) {
+    if (index === setr) {
+      console.log(setr);
+      $(this).css({
+        background:'#042928'
+      })
+    }
     let x = Math.round(
       width / 2 + radius * Math.cos(angle) - $(this).width() / 2
     );
@@ -71,6 +83,7 @@ $("#start").on("click", () => {
     });
     angle += step;
   });
+  // установка времени повтора передачи id
   let timerId = setInterval(function() {
     for (let i = 0; i < arrayobj.length; i++) {
       if (i === 0) {
@@ -112,6 +125,7 @@ $("#start").on("click", () => {
     for (let i = 0; i < arrayobj.length; i++) {
       arrayobj[i].idnex = arrayobj[i].idmax;
     }
+    // создание и вывод в html
     schtk += 1;
     let zapr = `<div class='radius'></div><div id='center'><p>0</p></div>`;
     for (let i = 0; i < arrayobj.length; i++) {
@@ -122,7 +136,13 @@ $("#start").on("click", () => {
     $("#container").html(zapr);
     $("#center p").html(schtk);
     let step = (2 * Math.PI) / $(".field").length;
-    $(".field").each(function() {
+    $(".field").each(function(index) {
+      if (index === setr) {
+        console.log(setr);
+        $(this).css({
+          background:'#042928'
+        })
+      }
       let x = Math.round(
         width / 2 + radius * Math.cos(angle) - $(this).width() / 2
       );
@@ -136,6 +156,7 @@ $("#start").on("click", () => {
       angle += step;
     });
   }, time);
+  // количество повторов передачи
   const timeset = (arrayobj.length * time) / 2;
   setTimeout(function() {
     clearInterval(timerId);
