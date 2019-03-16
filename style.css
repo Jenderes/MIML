@@ -1,0 +1,59 @@
+body {
+     padding: 2em;
+     padding: 0;
+     margin: 0;
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     position: relative;
+     }
+#container { 
+    width: 600px;
+    height: 600px;
+    border: 1px solid #000; 
+}
+#center {
+    width: 80px;
+    height: 80px;
+    position: absolute;
+    left: calc(50vw - 140px);
+    top: 265px;
+    background: #053b5f;
+    border-radius: 50%;
+    color: #ffffff;
+    text-align: center;
+    font-size: 25px;
+     }
+.field { 
+    width:80px;
+    height: 80px;
+    position: absolute;
+    border-radius: 50%;
+    color: #ffffff;
+    text-align: center;
+    font-size: 12px;
+    background: #186663;
+    color: #e9f8f8;
+    font-weight: bold;
+}
+ .radius {
+     background: #ffffff;
+     border-radius: 50%;
+     border: 5px solid black;
+     width: 400px;
+     left: calc(50vw - 300px);
+     top: 100px;
+     height: 400px;
+     position: absolute; 
+ }
+ .dbutton {
+     width: 100px;
+     height: 30px;
+     color: white;
+     border-radius: 20px;
+     background: #39045c;
+     margin-top: 10px;
+     margin-left: 30px;
+     text-align: center;
+     font-size: 1.5em;
+ }
