@@ -1,0 +1,22 @@
+img {
+    width: 80px;
+}
+.field {
+    width: 80px;
+    height: 85px;
+    border-radius: 20%;
+    position: absolute;
+}
+.manco {
+    width: 80px;
+    height: 85px;
+    border-radius: 20%;
+    position: absolute;
+}
+.cmpf {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: #5683fd;
+    position: absolute;
+}
