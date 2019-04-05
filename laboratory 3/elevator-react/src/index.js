@@ -7,10 +7,10 @@ const maleIcon =
 	'<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" x="0px" y="0px" viewBox="0 0 100 100" enable-background="new 0 0 100 100" xml:space="preserve"><path d="M44.555,74.093c0,1.481,0.721,2.223,2.164,2.223c1.447,0,2.17-0.742,2.17-2.223V54.077h2.223v20.017  c0,1.481,0.725,2.223,2.17,2.223s2.17-0.742,2.17-2.223v-34.1h1.057v12.283c0,0.777,0.266,1.342,0.795,1.694  c0.527,0.353,1.072,0.353,1.641,0c0.563-0.352,0.844-0.917,0.844-1.694V39.04c0-1.412-0.479-2.505-1.428-3.282  c-0.951-0.777-2.273-1.167-3.967-1.167h-8.678c-1.623,0-2.943,0.354-3.965,1.06c-1.023,0.706-1.537,1.8-1.537,3.284v14.084  c0,0.634,0.283,1.093,0.848,1.375c0.564,0.283,1.111,0.283,1.639,0c0.527-0.282,0.795-0.741,0.795-1.375V39.994h1.061V74.093z"/><path d="M45.398,28.185c0,1.237,0.439,2.295,1.32,3.177c0.885,0.882,1.941,1.325,3.174,1.325c1.238,0,2.293-0.443,3.18-1.325  c0.879-0.881,1.32-1.959,1.32-3.231c0-1.198-0.441-2.241-1.32-3.122c-0.887-0.882-1.941-1.325-3.18-1.325  c-1.232,0-2.289,0.443-3.174,1.325C45.838,25.89,45.398,26.95,45.398,28.185z"/></svg>';
 
 const config = {
-	floors: 5,
+	floors: 6,
 	elevators: 1,
 	minPeople: 1,
-	maxPeople: 6,
+	maxPeople: 10,
 	minInterval: 1000,
 	maxInterval:  2000
 };
@@ -22,16 +22,39 @@ let data = {
 let personId = 0;
 let arrobj = [];
 let inf = 0;
-let flag = true;
+let flag = false;
 let dlm = 0;
 let containerEl = document.querySelector(".container");
-function sleep() {
-	let i = 1000000000;
-	while (i > 0) {
-		i--;
-	}
-  };
-
+let t = 0;
+let ito = 0;
+let flager = true;
+let flags = true;
+function timer () {
+	setTimeout(function () { 
+		if (flager) {
+			document.getElementById('timers').textContent = "Second: "+ito;
+			ito+=1;
+			timer ();
+		}
+	},1000);
+ }
+  ReactDOM.render(
+	<div className='timer'>
+		  <h1 id='timers'></h1>
+		  <div>
+		  </div>
+			{/* <div className = 'datacheck'>
+		 		<div>
+				 <input type="text" placeholder = "Количесвто этажей" id = "floor" />
+				 <input type="text" placeholder = "мин кол людей"  id = "min"/>
+				 <input type="text" placeholder = "макс кол людей"id = "max" />
+				 <button onClick = {timer()}>Start</button>
+		 		</div>
+			</div> */}
+		</div>,
+	document.getElementById('app')
+  )
+  
 function randomExcept(min, max, except) {
 	let r = Math.floor(Math.random() * (max - min + 1) + min);
 	return r !== except ? r : randomExcept(min, max, except);
@@ -51,6 +74,16 @@ function getRandomPeople(min, max, currentFloorIndex, data) {
 					1 +
 					config.minInterval) |
 				0)
+        }));
+}
+function getPeople(data) {
+	return Array(2)
+		.fill()
+		.map((item, index) => ({
+			index: personId++,
+			originalFloor: 4,
+			targetFloorIndex: 4,
+			arrivesAt: 1000
         }));
 }
 for (let floorIndex = 0; floorIndex < config.floors; floorIndex++) {
@@ -74,25 +107,6 @@ for (let floorIndex = 0; floorIndex < config.floors; floorIndex++) {
     }
     dlm += data.floors[floorIndex].people.length;
 }
-async function demo(floorIndex) { 
-	if(floorIndex !== 4) {
-		for (let i = 1; i < arrobj.length; i++) {
-		if (arrobj[0].floor === arrobj[i].floor) {
-				arrobj.splice(i,1);
-				arrobj.splice(0,1);
-			break;
-		} else if (i === arrobj.length - 1) {
-			arrobj.splice(0,1);
-		}
-	}
-	await sleep(2000);
-	data.floors[floorIndex].people.shift();
-	data.floors[floorIndex].people.shift();
-	} 
-
-  };
-console.log("data", data);
-console.log("people", data.floors[0].people);
 for (let elevatorIndex = 0; elevatorIndex < config.elevators; elevatorIndex++) {
 	data.elevators.push({
 		index: elevatorIndex,
@@ -226,35 +240,52 @@ function init(data) {
 }
 function inited(data) {
 	if (inf === dlm) {
-	let t = 0;
-	while (t !== 10) {
+		if (flags) {
+			timer();
+			flags = false;
+		}
+	setTimeout(function () {
 		if (arrobj.length !== 0) {
-			if(arrobj[0].floor !== 4) {
+			console.log(data.floors[arrobj[0].floor].people);
+			if(flag) {
+				if(arrobj.length === 1) {
+					data.floors[arrobj[0].floor].people.shift();
+					arrobj.splice(0,1);
+					callDown(config.floors -1,data);
+					flag = false;
+				}
 				for (let i = 1; i < arrobj.length; i++) {
 				if (arrobj[0].floor === arrobj[i].floor) {
-						callDown(arrobj[0].floor,data);
-						sleep();
 						data.floors[arrobj[0].floor].people.shift();
 						data.floors[arrobj[0].floor].people.shift();
 						arrobj.splice(i,1);
 						arrobj.splice(0,1);
-						sleep();
-						callDown(4,data);
+						callDown(config.floors -1,data);
+						flag = false;
 					break;
 				} else if (i === arrobj.length - 1) {
-					callDown(arrobj[0].floor,data);
-					sleep();
 					data.floors[arrobj[0].floor].people.shift();
 					arrobj.splice(0,1);
-					callDown(4,data);
+					callDown(config.floors -1,data);
+					flag = false;
 				}
 			}
-			} 
-		sleep();
+			}  else {
+				data.floors[config.floors -1].people = getPeople();
+				callDown(arrobj[0].floor,data);
+				flag = true;
+				console.log(data.floors[3]);
+			}
 		console.log(t);
+		console.log(0);
+		console.log(config.floors -1);
+		t+=1;
+		inited(data);
+	} else {
+		callDown(config.floors -1,data);
+		flager = false;
 	}
-	t+=1;
-	}
+}, 3000);	
 }
 }
 init(data);

@@ -9,7 +9,7 @@ img {
 }
 .manco {
     width: 80px;
-    height: 85px;
+    height: 90px;
     border-radius: 20%;
     position: absolute;
 }
@@ -19,4 +19,9 @@ img {
     border-radius: 50%;
     background: #5683fd;
     position: absolute;
+}
+#naim {
+    position: absolute;
+    top: 500px;
+    left: 300px;
 }

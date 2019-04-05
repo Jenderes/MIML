@@ -8,7 +8,15 @@
   function getRandomInt(min, max) {
     return Math.floor(Math.random() * (max - min)) + min;
   }
-
+  function getRandomColor() {
+    var letters = '0123456789ABCDEF';
+    var color = '#';
+    for (var i = 0; i < 6; i++) {
+      color += letters[Math.floor(Math.random() * 16)];
+    }
+    return color;
+  }
+function set() {
   function timeout() {
     setTimeout(function () {
       let zapr = '';
@@ -39,7 +47,7 @@
       $(".manco").each(function (index) {
         $(this).css({
           left: x + "px",
-          top: 150 + "px",
+          top: 100 + "px",
           background: comp[i].man.color,
         });
         x += 200;
@@ -47,17 +55,17 @@
       });
       console.log(time);
       i += 1;
-      time = getRandomInt(500, 2000);
-      let copmut = getRandomInt(0, 3);
-      let ranman = arrman.splice(0,1)
+      time = getRandomInt(1000, 3000);
+      let copmut = getRandomInt(0, comp.length-1);
+      let ranman = arrman.splice(0, 1)
       console.log(ranman);
       arrman.push(comp[copmut].man);
       comp[copmut].man = ranman[0];
       timeout();
     }, time);
   }
-  let time = 1000;
-  let color = ['#04e0fd', '#04fd25', '#ee87b2', '#87eec6', '#cfee87', '#c5bba0', '#37f1c346', '#f5be9946', ' #e2c1eb46', '#da2c5746', '#4c7fec46', '#d14cec46']
+  let time = 1500;
+  let color = []
   const comput = {
     man: {},
     number: 0
@@ -67,13 +75,17 @@
     number: 0,
     color: 0
   }
-  for (let j = 0; j < 10; j++) {
+  let colcomp = parseInt(document.getElementById('setcomp').value);
+  let people = Math.floor(1.8*colcomp);
+  console.log(people);
+  for (let j = 0; j < people; j++) {
     arrman[j] = Object.assign({}, man);
     arrman[j].number = j;
-    arrman[j].color = color[j];
+    arrman[j].color = getRandomColor();
+    color.push(arrman[j].color);
   }
   let comp = [];
-  for (let i = 0; i < 4; i++) {
+  for (let i = 0; i < colcomp; i++) {
     comp[i] = Object.assign({}, comput);
     comp[i].number = i;
     comp[i].man = Object.assign({}, arrman[0]);
@@ -82,11 +94,11 @@
   console.log(comp);
   console.log(arrman);
   let zapr = '';
-  for (let i = 0; i < 10; i++) {
+  for (let i = 0; i < people; i++) {
     zapr += `<div id ='${i}' class='field'><img src="stan.svg" alt=""></div>`;
   }
   let twozapr = '';
-  for (let i = 0; i < 4; i++) {
+  for (let i = 0; i < colcomp; i++) {
     twozapr += `<div id ='${i}' class='cmpf'><img src="computer.svg" alt=""></div>`;
   }
   let x = 0;
@@ -115,3 +127,4 @@
     i += 1;
   });
   timeout();
+}
