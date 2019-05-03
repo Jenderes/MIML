@@ -10,8 +10,8 @@ const config = {
 	floors: 6,
 	elevators: 1,
 	minPeople: 1,
-	maxPeople: 10,
-	minInterval: 1000,
+	maxPeople: 6,
+	minInterval: 800,
 	maxInterval:  2000
 };
 
