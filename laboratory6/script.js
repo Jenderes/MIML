@@ -32,7 +32,7 @@
         // Paiting boat
         let HtmlBoat = ``;
         ArrayBoat.forEach(Boat => {
-            HtmlBoat += `<div class="BoatPosition" id="BoatPosition"><img src="img/cargo-ship.svg" alt=""></div>`;
+            HtmlBoat += `<div class="BoatPosition" id="BoatPosition"> <div class="img"><img src="img/cargo-ship.svg" alt=""></div> <div class="id">${Boat.IDBoat}</div> </div>`;
         });
         // Render in html Boat
         $('#ContainerBoat').html(HtmlBoat);
@@ -65,7 +65,7 @@
         // Paiting  second position boat
         let HtmlBoat = ``;
         ArrayBoatInDock.forEach(Boat => {
-            HtmlBoat += `<div class="BoatSecondPosition" id="BoatSecondPosition"><img src="img/cargo-ship.svg" alt=""></div>`;
+            HtmlBoat += `<div class="BoatSecondPosition" id="BoatSecondPosition"> <div class="img"><img src="img/cargo-ship.svg" alt=""></div> <div class="id">${Boat.IDBoat}</div> </div>`;
         });
         // Render in html Boat
         $('#ContainerPortBoat').html(HtmlBoat);
@@ -93,8 +93,8 @@
                     if (check == ArrayBoatInDock.length) {
                         ArrayBoatInDock.push(ArrayBoat[i]);
                         CaseIdDelete.push(ArrayBoat[i].IDBoat);
-                        check = 0;
                     } 
+                    check = 0;
                 } else {
                     ArrayBoatInDock.push(ArrayBoat[i]);
                 }
