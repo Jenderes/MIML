@@ -7,9 +7,10 @@
     let PositionBoat = [50, 220, 390];
     let Case = [];
     let CaseIdDelete = [];
-    let interval = 1000;
+    let interval = 500;
     var checker = 0;
     let first = false;
+    let prover = true;
     function randomInteger(min, max) { var rand = min - 0.5 + Math.random() * (max - min + 1); rand = Math.round(rand); return rand;}
     function ischeck(value) {
         console.log(value)
@@ -72,7 +73,7 @@
 
         for (let i = 0; i < ArrayBoatInDock.length; i++) {
             $(`#BoatSecondPosition:nth-child(${i + 1})`).css({
-                left: PositionBoat[ArrayBoatInDock[i].IDIn] + 'px',
+                left: PositionBoat[ArrayBoatInDock[i].IDPort] + 'px',
                 background: ArrayBoatInDock[i].ColorBoat
             });
         }
@@ -80,27 +81,66 @@
 
     function MoveFirstToSecond() {
         // fill Array boat in dock
-        let check = 0;
+        prover = true
+        let checker = 0;
         if (ArrayBoatInDock.length < 3) {
-            for (let i = ArrayBoat.length-1 ; i > 0; i--) {
-                if (ArrayBoatInDock.length <= ArrayDock.length) {
-                    if(ArrayBoatInDock.length != 0){
-                    for (let j = 0; j < ArrayBoatInDock.length; j++) {
-                        if(ArrayBoatInDock[j].IDIn !== ArrayBoat[i].IDIn) {
-                            check+= 1;
-                        }
+           if(ArrayBoatInDock.length == 0 ) {
+         if (ArrayBoat[ArrayBoat.length-1].IDIn <= 0) {
+            ArrayBoat[ArrayBoat.length-1].IDPort = 0;
+            ArrayBoatInDock.push(ArrayBoat[ArrayBoat.length-1]);
+            ArrayBoat.splice(-1,1);
+         } else if (ArrayBoat[ArrayBoat.length-1].IDIn <= 1) {
+            ArrayBoat[ArrayBoat.length-1].IDPort = 1;
+            ArrayBoatInDock.push(ArrayBoat[ArrayBoat.length-1]);
+            ArrayBoat.splice(-1,1);
+         } else {
+            ArrayBoat[ArrayBoat.length-1].IDPort = 2;
+            ArrayBoatInDock.push(ArrayBoat[ArrayBoat.length-1]);
+            ArrayBoat.splice(-1,1);
+         }
+        } else {
+            if (ArrayBoat[ArrayBoat.length-1].IDIn <= 0 && prover) {
+                ArrayBoat[ArrayBoat.length-1].IDPort = 0;
+                for (let j = 0; j < ArrayBoatInDock.length; j++) {
+                    if (ArrayBoat[ArrayBoat.length-1].IDPort !== ArrayBoatInDock[j].IDPort) {
+                        checker+=1;
                     }
-                    if (check == ArrayBoatInDock.length) {
-                        ArrayBoatInDock.push(ArrayBoat[i]);
-                        CaseIdDelete.push(ArrayBoat[i].IDBoat);
-                    } 
-                    check = 0;
-                } else {
-                    ArrayBoatInDock.push(ArrayBoat[i]);
                 }
-                } else {
-                    break;
+                if (checker == ArrayBoatInDock.length) {
+                    ArrayBoatInDock.push(ArrayBoat[ArrayBoat.length-1]);
+                    ArrayBoat.splice(-1,1);
                 }
+                checker = 0;
+                prover = false;
+             } 
+             if (ArrayBoat[ArrayBoat.length-1].IDIn <= 1) {
+                ArrayBoat[ArrayBoat.length-1].IDPort = 1;
+                for (let j = 0; j < ArrayBoatInDock.length; j++) {
+                    if (ArrayBoat[ArrayBoat.length-1].IDPort !== ArrayBoatInDock[j].IDPort) {
+                        checker+=1;
+                    }
+                }
+                if (checker == ArrayBoatInDock.length) {
+                    ArrayBoatInDock.push(ArrayBoat[ArrayBoat.length-1]);
+                    ArrayBoat.splice(-1,1);
+                }
+                checker = 0;
+                prover = false;
+             } 
+             if (ArrayBoat[ArrayBoat.length-1].IDIn <= 2) {
+                ArrayBoat[ArrayBoat.length-1].IDPort = 2;
+                for (let j = 0; j < ArrayBoatInDock.length; j++) {
+                    if (ArrayBoat[ArrayBoat.length-1].IDPort !== ArrayBoatInDock[j].IDPort) {
+                        checker+=1;
+                    }
+                }
+                if (checker == ArrayBoatInDock.length) {
+                    ArrayBoatInDock.push(ArrayBoat[ArrayBoat.length-1]);
+                    ArrayBoat.splice(-1,1);
+                }
+                checker = 0;
+                prover = false;
+             }
             }
         }
         ArrayBoat = ArrayBoat.filter(ischeck);
@@ -124,10 +164,12 @@
         let Boat = {
             IDBoat: 0,
             IDIn: 0,
+            IDPort: 0,
             ColorBoat: '#186663'
         }
         // Filling array for docks
         for (let i = 0; i < 3; i++) {
+            let numb = randomInteger(0,2);
             ArrayDock[i] = Object.assign({}, ObjectDock);
             ArrayDock[i].IdDock = i;
             ArrayDock[i].ColorDock = ArrayColor[i];
@@ -144,16 +186,26 @@
             }
             CountType++;
         }
+        console.log(ArrayBoat);
         RenderBoatAndDock();
+        let sttr = 0; 
         function runInterval() {
             setTimeout(function () {
                 if (checker == 0) {
-                    MoveFirstToSecond();
-                    RenderBoatAndDock();
-                    RenderSecondPositionBoat();
-                    checker+=1;
+                    if(sttr <= 2) {
+                        MoveFirstToSecond();
+                        RenderBoatAndDock();
+                        RenderSecondPositionBoat();
+                        sttr+=1;
+                    } else {
+                        MoveFirstToSecond();
+                        RenderBoatAndDock();
+                        RenderSecondPositionBoat();
+                        checker+=1;
+                    }
                     console.log(checker);
                 } else if (checker == 1) {
+                    RenderBoatAndDock();
                     MoveLeave();
                     RenderSecondPositionBoat();
                     checker+=1;
@@ -161,6 +213,13 @@
                 } else if (checker == 2) {
                     LeaveToBoat()
                     RenderBoatAndDock();
+                    RenderSecondPositionBoat();
+                    checker += 1;
+                    console.log(checker);
+                } else if (checker == 3) {
+                    MoveFirstToSecond();
+                    RenderBoatAndDock();
+                    RenderSecondPositionBoat();
                     checker = 0;
                     console.log(checker);
                 }
@@ -169,3 +228,25 @@
         }
         runInterval();
     });
+
+    // fill Array Dock test
+    // for (let i = ArrayBoat.length-1 ; i > 0; i--) {
+    //     if (ArrayBoatInDock.length <= ArrayDock.length) {
+    //         if(ArrayBoatInDock.length != 0){
+    //         for (let j = 0; j < ArrayBoatInDock.length; j++) {
+    //             if(ArrayBoatInDock[j].IDIn <= ArrayBoat[i].IDIn) {
+                    
+    //             }
+    //         }
+    //         if (check == ArrayBoatInDock.length) {
+    //             ArrayBoatInDock.push(ArrayBoat[i]);
+    //             CaseIdDelete.push(ArrayBoat[i].IDBoat);
+    //         } 
+    //         check = 0;
+    //     } else {
+    //         ArrayBoatInDock.push(ArrayBoat[i]);
+    //     }
+    //     } else {
+    //         break;
+    //     }
+    // }
